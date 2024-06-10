@@ -1,0 +1,72 @@
+/* Route.css - updated */
+
+.navbar {
+  background: linear-gradient(135deg, #ff6b6b, #ffcc00);
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  position: fixed;
+  width: 100%;
+  z-index: 10;
+  transition: background 0.5s ease;
+}
+
+.navbar .navbar-brand, .navbar .nav-link {
+  color: #fff;
+  margin-right: 1.5rem;
+  transition: color 0.3s ease, transform 0.3s ease;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.navbar .navbar-brand:hover, .navbar .nav-link:hover {
+  color: #2c3e50;
+  transform: scale(1.1);
+}
+
+/* Footer Styles - Welcome.css */
+
+.footer {
+  background: linear-gradient(135deg, #1c1c1c, #2c3e50);
+  color: #fff;
+  text-align: center;
+  padding: 1rem 0;
+  position: fixed;
+  width: 100%;
+  bottom: 0;
+  left: 0;
+  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
+  z-index: 10;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.footer p {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+.footer a {
+  color: #ffcc00;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.footer a:hover {
+  color: #ff6b6b;
+}
+
+
+.x {
+  background: linear-gradient(135deg, #667eea, #764ba2);
+  color: #fff;
+  padding: 2.5rem;
+  border-radius: 15px;
+  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+}
+
+.error-message {
+  color: #e74c3c;
+  margin-top: 1.25rem;
+  font-size: 1.2rem;
+  text-align: center;
+}
