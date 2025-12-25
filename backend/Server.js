@@ -1,80 +1,135 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
 
 const app = express();
 app.use(cors());
 app.use(express.json());
 
-mongoose.connect('mongodb://localhost:27017/blogdb', { useNewUrlParser: true, useUnifiedTopology: true })
-    .then(() => console.log('Connected to MongoDB'))
-    .catch(err => console.error('Failed to connect to MongoDB', err));
+mongoose.connect('mongodb://127.0.0.1:27017/blogdb')
+  .then(() => console.log('Connected to MongoDB'))
+  .catch(err => console.error(err));
 
+const SECRET = "BLOG_APP_SECRET";
+
+/* ================== SCHEMAS ================== */
 const userSchema = new mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
-    role: String,
+  name: String,
+  email: String,
+  password: String,
+  role: { type: String, default: 'user' }
 });
 
 const postSchema = new mongoose.Schema({
-    title: String,
-    content: String,
-    author: String,
+  title: String,
+  content: String,
+  author: String,
+  authorId: mongoose.Schema.Types.ObjectId
 });
 
 const User = mongoose.model('User', userSchema);
 const Post = mongoose.model('Post', postSchema);
 
-// User registration
-app.post('/users', async (req, res) => {
-    try {
-      const { name, email, password } = req.body;
-      if (!name || !email || !password) {
-        return res.status(400).send({ error: 'All fields are required' });
-      }
-      const user = new User({ name, email, password });
-      await user.save();
-      res.status(201).send(user);
-    } catch (error) {
-      console.error(error);
-      res.status(500).send({ error: 'Internal Server Error' });
-    }
+/* ================== MIDDLEWARE ================== */
+const auth = (req, res, next) => {
+  const token = req.headers.authorization;
+  if (!token) return res.status(401).send("Access denied");
+
+  try {
+    const decoded = jwt.verify(token, SECRET);
+    req.user = decoded;
+    next();
+  } catch {
+    res.status(401).send("Invalid token");
+  }
+};
+
+/* ================== AUTH ROUTES ================== */
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (await User.findOne({ email }))
+    return res.status(409).send("Email exists");
+
+  const hashed = await bcrypt.hash(password, 10);
+  const user = new User({ name, email, password: hashed });
+  await user.save();
+
+  res.status(201).send("Registered");
+});
+
+app.post('/login', async (req, res) => {
+  const { email, password } = req.body;
+  const user = await User.findOne({ email });
+
+  if (!user) return res.status(401).send("Invalid email");
+
+  const match = await bcrypt.compare(password, user.password);
+  if (!match) return res.status(401).send("Invalid password");
+
+  const token = jwt.sign(
+    { id: user._id, name: user.name, role: user.role },
+    SECRET,
+    { expiresIn: "1h" }
+  );
+
+  res.send({ token, user });
+});
+
+/* ================== POSTS ================== */
+app.post('/posts', auth, async (req, res) => {
+  const post = new Post({
+    ...req.body,
+    author: req.user.name,
+    authorId: req.user.id
   });
-  
-
-// User login
-app.get('/users', async (req, res) => {
-    const { email } = req.query;
-    try {
-        const user = await User.findOne({ email });
-        if (user) res.send([user]);
-        else res.send([]);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+  await post.save();
+  res.status(201).send(post);
 });
 
-// Create post
-app.post('/posts', async (req, res) => {
-    try {
-        const post = new Post(req.body);
-        await post.save();
-        res.status(201).send(post);
-    } catch (err) {
-        res.status(400).send(err);
-    }
-});
-
-// Get posts
 app.get('/posts', async (req, res) => {
-    try {
-        const posts = await Post.find();
-        res.send(posts);
-    } catch (err) {
-        res.status(500).send(err);
-    }
+  const posts = await Post.find();
+  res.send(posts);
 });
 
-const PORT = process.env.PORT || 4000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.put('/posts/:id', auth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+
+  if (
+    post.authorId.toString() !== req.user.id &&
+    req.user.role !== 'admin'
+  ) {
+    return res.status(403).send("Forbidden");
+  }
+
+  Object.assign(post, req.body);
+  await post.save();
+  res.send(post);
+});
+
+app.delete('/posts/:id', auth, async (req, res) => {
+  const post = await Post.findById(req.params.id);
+
+  if (
+    post.authorId.toString() !== req.user.id &&
+    req.user.role !== 'admin'
+  ) {
+    return res.status(403).send("Forbidden");
+  }
+
+  await post.deleteOne();
+  res.send("Deleted");
+});
+
+/* ================== ADMIN ================== */
+app.get('/admin/users', auth, async (req, res) => {
+  if (req.user.role !== 'admin')
+    return res.status(403).send("Admin only");
+
+  const users = await User.find();
+  res.send(users);
+});
+
+app.listen(4000, () => console.log("Server running on 4000"));

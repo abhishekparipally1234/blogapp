@@ -1,72 +1,85 @@
-/* Route.css - updated */
+/* =========================
+   NAVBAR
+========================= */
 
 .navbar {
-  background: linear-gradient(135deg, #ff6b6b, #ffcc00);
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   padding: 1rem 2rem;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   position: fixed;
+  top: 0;
   width: 100%;
-  z-index: 10;
-  transition: background 0.5s ease;
+  z-index: 100;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.25);
 }
 
-.navbar .navbar-brand, .navbar .nav-link {
-  color: #fff;
-  margin-right: 1.5rem;
-  transition: color 0.3s ease, transform 0.3s ease;
-  font-weight: 700;
-  font-size: 1.2rem;
+.navbar-brand {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: 1.4rem;
+  margin-left: 10px;
 }
 
-.navbar .navbar-brand:hover, .navbar .nav-link:hover {
-  color: #2c3e50;
-  transform: scale(1.1);
+.navbar-brand:hover {
+  color: #e0e7ff;
 }
 
-/* Footer Styles - Welcome.css */
+.navbar-nav .nav-link,
+.nav-links .nav-link {
+  color: #ffffff;
+  font-weight: 600;
+  margin-right: 1.2rem;
+  transition: opacity 0.2s ease, transform 0.2s ease;
+  margin-left: 1.2 rem;
+}
+
+.navbar-nav .nav-link:hover,
+.nav-links .nav-link:hover {
+  opacity: 0.85;
+  transform: translateY(-1px);
+}
+.nav-item{
+  margin-left: 10px;
+}
+
+/* =========================
+   FOOTER
+========================= */
 
 .footer {
-  background: linear-gradient(135deg, #1c1c1c, #2c3e50);
-  color: #fff;
+  background: #111827;
+  color: #d1d5db;
   text-align: center;
   padding: 1rem 0;
   position: fixed;
-  width: 100%;
   bottom: 0;
-  left: 0;
-  box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.1);
-  z-index: 10;
-  font-family: 'Montserrat', sans-serif;
+  width: 100%;
+  box-shadow: 0 -4px 12px rgba(0, 0, 0, 0.25);
 }
 
 .footer p {
   margin: 0;
   font-size: 0.9rem;
-  font-weight: 500;
 }
 
-.footer a {
-  color: #ffcc00;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-.footer a:hover {
-  color: #ff6b6b;
-}
-
+/* =========================
+   ERROR PAGE
+========================= */
 
 .x {
-  background: linear-gradient(135deg, #667eea, #764ba2);
-  color: #fff;
-  padding: 2.5rem;
-  border-radius: 15px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
+  background: linear-gradient(135deg, #ef4444, #b91c1c);
+  color: #ffffff;
+  padding: 3rem;
+  border-radius: 18px;
+  text-align: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
 }
 
-.error-message {
-  color: #e74c3c;
-  margin-top: 1.25rem;
-  font-size: 1.2rem;
-  text-align: center;
+.x p:first-child {
+  font-size: 1.6rem;
+  font-weight: 800;
+}
+
+.x p:last-child {
+  font-size: 1rem;
+  opacity: 0.9;
 }

@@ -1,85 +1,72 @@
-/* Authenticate.css */
+/* =========================
+   AUTH FORMS
+========================= */
 
 .form-container {
-  background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 99%, #fad0c4 100%);
+  background: linear-gradient(135deg, #2563eb, #1e40af);
   padding: 3rem;
-  border-radius: 15px;
-  box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-  max-width: 450px;
+  border-radius: 18px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.25);
+  max-width: 420px;
   margin: 5rem auto;
-  color: #fff;
+  color: #ffffff;
 }
 
 .form-container h1 {
   text-align: center;
-  margin-bottom: 2rem;
-  color: #fff;
-  font-weight: 700;
+  margin-bottom: 1.8rem;
   font-size: 2rem;
+  font-weight: 800;
+}
+
+.form-container p {
+  text-align: center;
+  font-size: 0.95rem;
+  color: #e5e7eb;
 }
 
 .form-group {
-  margin-bottom: 1.75rem;
+  margin-bottom: 1.4rem;
 }
 
 .form-group label {
   display: block;
-  margin-bottom: 0.5rem;
   font-weight: 600;
-  color: #fff;
+  margin-bottom: 0.4rem;
+  color: #e5e7eb;
 }
 
 .form-group input {
   width: 100%;
-  padding: 0.85rem;
-  border-radius: 8px;
+  padding: 0.75rem;
+  border-radius: 10px;
   border: none;
   font-size: 1rem;
-  background-color: #fff;
-  color: #333;
 }
 
-.btn-primary, .btn-success {
+.form-group input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.25);
+}
+
+.btn-primary,
+.btn-success {
   width: 100%;
-  padding: 0.85rem;
-  border: none;
-  border-radius: 8px;
-  font-weight: 700;
-  transition: background-color 0.3s ease, transform 0.3s ease;
-  font-size: 1.1rem;
   margin-top: 1rem;
 }
 
-.btn-primary {
-  background-color: #ff6b6b;
-}
-
-.btn-success {
-  background-color: #51cf66;
-}
-
-.btn-primary:hover, .btn-success:hover {
-  background-color: #ff4757;
-  transform: translateY(-2px);
-}
-
 .error-message {
-  color: #e74c3c;
-  margin-top: 0.75rem;
+  text-align: center;
+  color: #fecaca;
   font-size: 0.9rem;
-  text-align: center;
+  margin-top: 0.6rem;
 }
 
-.text-center {
-  text-align: center;
+.form-container a {
+  color: #fde68a;
+  font-weight: 600;
 }
 
-.nav-link {
-  color: #fff !important;
-  font-weight: bold;
-  text-decoration: none;
-}
-
-.nav-link:hover {
-  color: #ddd !important;
+.form-container a:hover {
+  color: #fff;
 }

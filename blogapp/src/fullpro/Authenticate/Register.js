@@ -1,22 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link, useNavigate } from 'react-router-dom';
-import './Authenticate.css';
 import axios from 'axios';
+import './Authenticate.css';
 import '../../Styles.css';
+
 function Register() {
   const { register, handleSubmit, formState: { errors } } = useForm();
   const navigate = useNavigate();
+  const [error, setError] = useState('');
 
   const onSubmit = async (data) => {
     try {
-      const response = await axios.post(`http://localhost:4000/users`, data);
-      if (response.status === 201) {
-        navigate('/login');
-      }
+      await axios.post('http://localhost:4000/register', {
+        name: data.name,
+        email: data.email,
+        password: data.password
+      });
+
+      alert('Registration successful. Please login.');
+      navigate('/login');
     } catch (err) {
-      console.error("Error in Signup: ", err);
-      alert('An error occurred during registration. Please try again.');
+      if (err.response?.status === 409) {
+        setError('Email already exists');
+      } else {
+        setError('Registration failed');
+      }
     }
   };
 
@@ -24,24 +33,50 @@ function Register() {
     <div className="form-container">
       <form onSubmit={handleSubmit(onSubmit)}>
         <h1>User Registration</h1>
-        <p>All fields are mandatory</p>
+
+        {/* NAME */}
         <div className="form-group">
-          <label htmlFor="name">Name</label>
-          <input type="text" id="name" className="form-control" {...register('name', { required: true, minLength: 4 })} />
-          {errors.name && <p className="error-message">Minimum 4 characters</p>}
+          <label>Name</label>
+          <input
+            {...register('name', { required: true, minLength: 3 })}
+            className="form-control"
+          />
+          {errors.name && <p className="error-message">Minimum 3 characters</p>}
         </div>
+
+        {/* EMAIL */}
         <div className="form-group">
-          <label htmlFor="email">Email</label>
-          <input type="email" id="email" className="form-control" {...register('email', { required: true })} />
-          {errors.email && <p className="error-message">Email is required</p>}
+          <label>Email</label>
+          <input
+            type="email"
+            {...register('email', { required: true })}
+            className="form-control"
+          />
+          {errors.email && <p className="error-message">Email required</p>}
         </div>
+
+        {/* PASSWORD */}
         <div className="form-group">
-          <label htmlFor="password">Password</label>
-          <input type="password" id="password" className="form-control" {...register('password', { required: true, minLength: 4 })} />
-          {errors.password && <p className="error-message">Minimum 4 characters</p>}
+          <label>Password</label>
+          <input
+            type="password"
+            {...register('password', { required: true, minLength: 4 })}
+            className="form-control"
+          />
+          {errors.password && (
+            <p className="error-message">Minimum 4 characters</p>
+          )}
         </div>
-        <button type="submit" className="btn btn-success">Submit</button>
-        <p>Already registered? <Link to="/login">Login</Link></p>
+
+        {error && <p className="error-message">{error}</p>}
+
+        <button type="submit" className="btn btn-success">
+          Register
+        </button>
+
+        <p className="text-center mt-2">
+          Already registered? <Link to="/login">Login</Link>
+        </p>
       </form>
     </div>
   );

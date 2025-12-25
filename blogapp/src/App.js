@@ -9,6 +9,7 @@ import Userdash from './fullpro/Welcome/Userdash';
 import Postlist from './fullpro/Welcome/Postlist';
 import Createpost from './fullpro/Welcome/Createpost';
 import AuthLay from './fullpro/Welcome/AuthLay';
+import EditPost from './fullpro/Welcome/EditPost';
 function App() {
   let router = createBrowserRouter([
     {
@@ -46,6 +47,10 @@ function App() {
         {
           path: "create-post",
           element: <Createpost />
+        },
+        {
+          path: "edit-post/:id",
+          element: <EditPost />
         }
       ]
     }
